@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#172b25">
+<title>Idiom Garden｜英語イディオム単語帳</title>
+<style>
+:root{--ink:#172b25;--muted:#718078;--paper:#f5f4ec;--card:#fffef9;--green:#315b49;--lime:#d6e7a7;--line:#e5e6da;--rose:#f4ded6}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--ink);color:#fff;padding:24px max(20px,calc((100vw - 980px)/2)) 28px}
+.brand{font-size:12px;letter-spacing:.18em;color:var(--lime);font-weight:800}.headrow{display:flex;align-items:end;justify-content:space-between;gap:20px;flex-wrap:wrap}h1{font-size:clamp(27px,5vw,42px);margin:9px 0 4px;letter-spacing:-.04em}.sub{color:#c8d3cc;font-size:14px}.count{font-size:13px;color:var(--lime);white-space:nowrap}
+main{max-width:980px;margin:0 auto;padding:24px 18px 60px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 16px}.stat b{display:block;font-size:23px}.stat span{font-size:12px;color:var(--muted)}
+.progress{height:7px;background:#e4e7db;border-radius:20px;overflow:hidden;margin:12px 0 22px}.bar{height:100%;background:var(--green);width:0%;transition:width .25s}
+.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:17px}.toolbar button,.toolbar select,.toolbar input{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:11px 13px;font:inherit;color:var(--ink)}.toolbar input{flex:1;min-width:180px}.toolbar button{cursor:pointer;font-weight:650}.toolbar button.active{background:var(--green);color:white;border-color:var(--green)}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:25px;padding:clamp(22px,5vw,42px);min-height:290px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:0 12px 35px #243c2b0b;cursor:pointer;position:relative}
+.eyebrow{font-size:11px;letter-spacing:.16em;color:var(--muted);font-weight:800}.word{font-size:clamp(27px,5vw,43px);font-weight:800;letter-spacing:-.04em;margin:28px 0 18px;line-height:1.2;overflow-wrap:anywhere}.meaning{font-size:clamp(18px,3vw,24px);line-height:1.6;font-weight:650}.hint{font-size:12px;color:var(--muted);margin-top:24px}.stage.revealed{background:#fbfff2}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 24px}.action{border:0;border-radius:13px;padding:13px 18px;font:inherit;font-weight:750;cursor:pointer}.primary{background:var(--green);color:#fff;flex:1}.know{background:var(--lime);color:var(--ink);flex:1}.miss{background:var(--rose);color:var(--ink);flex:1}.plain{background:#e9ece4;color:var(--ink)}
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:4px 0 26px}.nav button{background:transparent;border:1px solid var(--line);padding:10px 15px;border-radius:12px;cursor:pointer}.nav span{font-size:13px;color:var(--muted)}
+.sectiontitle{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:26px 0 12px}.sectiontitle h2{font-size:17px;margin:0}.sectiontitle small{color:var(--muted)}
+.list{display:grid;gap:8px}.item{display:flex;justify-content:space-between;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);padding:13px 15px;border-radius:13px}.item .en{font-weight:750}.item .ja{font-size:13px;color:var(--muted);text-align:right}.item button{border:0;background:none;color:var(--green);font-weight:700;cursor:pointer;white-space:nowrap}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:30px}
+@media(max-width:560px){header{padding:20px}.stats{gap:7px}.stat{padding:11px}.stat b{font-size:19px}.toolbar>*{font-size:13px!important}.stage{min-height:260px}.item{align-items:flex-start}.item .ja{max-width:45%}}
+</style>
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
+</head>
+<body>
+<header><div class="brand">IDIOM GARDEN</div><div class="headrow"><div><h1>英語イディオム単語帳</h1><div class="sub">毎日少しずつ、使える英語を育てよう。</div></div><div class="count">全58フレーズ</div></div></header>
+<main>
+<div class="stats">
+ <div class="stat"><b id="total">58</b><span>収録フレーズ</span></div>
+ <div class="stat"><b id="known">0</b><span>覚えた</span></div>
+ <div class="stat"><b id="remaining">58</b><span>これから</span></div>
+</div>
+<div class="progress"><div class="bar" id="bar"></div></div>
+<div class="toolbar">
+ <button class="active" data-filter="all">すべて</button><button data-filter="new">未習得</button><button data-filter="known">覚えた</button>
+ <input id="search" type="search" placeholder="イディオムを検索…">
+ <button id="shuffle">🔀 ランダム</button>
+</div>
+<div class="stage" id="card" role="button" tabindex="0" aria-label="カードをめくる">
+ <div><div class="eyebrow" id="cardNo">CARD 01 / 58</div><div class="word" id="english">Break the ice</div><div id="answer" hidden><div class="eyebrow">日本語の意味</div><div class="meaning" id="japanese"></div></div></div>
+ <div class="hint" id="hint">カードをタップして意味を確認</div>
+</div>
+<div class="actions">
+ <button class="action primary" id="flip">意味を見る</button>
+ <button class="action know" id="markKnown">✓ 覚えた</button>
+ <button class="action miss" id="markNew">↻ もう一度</button>
+</div>
+<div class="nav"><button id="prev">← 前へ</button><span id="position">1 / 58</span><button id="next">次へ →</button></div>
+<div class="sectiontitle"><h2>フレーズ一覧</h2><small id="listCount">58件</small></div>
+<div class="list" id="list"></div>
+<footer>学習状況はこのブラウザ内に保存されます。別の端末・ブラウザとは自動同期されません。</footer>
+</main>
+<script>
+const DATA = [{"en": "Break the ice", "ja": "緊張をほぐす、打ち解ける"}, {"en": "Hit the road", "ja": "出発する、旅立つ"}, {"en": "Piece of cake", "ja": "簡単なこと、朝飯前"}, {"en": "Under the weather", "ja": "体調が優れない"}, {"en": "Beat around the bush", "ja": "遠回しに言う、核心を避ける"}, {"en": "In the same boat", "ja": "同じ境遇にある"}, {"en": "On the fence", "ja": "決めかねている、中立の立場にいる"}, {"en": "Pull someone's leg", "ja": "冗談を言う、からかう"}, {"en": "Cut to the chase", "ja": "本題に入る、要点を言う"}, {"en": "Give someone a hand", "ja": "手伝う、助ける"}, {"en": "Hang out", "ja": "一緒に時間を過ごす"}, {"en": "Get the hang of it", "ja": "コツをつかむ"}, {"en": "Hit the hay / Hit the sack", "ja": "寝る、就寝する"}, {"en": "Keep in touch", "ja": "連絡を取り合う"}, {"en": "In hot water", "ja": "困った状況に陥っている"}, {"en": "All in good time", "ja": "そのうち、時が来れば"}, {"en": "Cut ties", "ja": "関係を断つ、縁を切る"}, {"en": "Bark up the wrong tree", "ja": "見当違いなことをする、的外れな行動をとる"}, {"en": "Catch-22", "ja": "逃れようのないジレンマ"}, {"en": "Pull yourself together", "ja": "しっかりして、落ち着いて"}, {"en": "Wet blanket", "ja": "場をしらけさせる人"}, {"en": "Between a rock and a hard place", "ja": "板挟みの状態、進退窮まった状況"}, {"en": "Out of the frying pan into the fire", "ja": "一難去ってまた一難"}, {"en": "Cross that bridge when you come to it", "ja": "その時が来たら考える"}, {"en": "Save for a rainy day", "ja": "万一の時のためにお金を貯める"}, {"en": "Weather the storm", "ja": "困難や試練を乗り切る"}, {"en": "When it rains, it pours", "ja": "悪いことは重なるものだ"}, {"en": "Your guess is as good as mine", "ja": "私にもわからない、私も推測するしかない"}, {"en": "Read between the lines", "ja": "行間を読む"}, {"en": "Speak of the devil", "ja": "噂をすれば影"}, {"en": "Talk through your hat", "ja": "知ったかぶりをする、根拠のないことを言う"}, {"en": "Word for word", "ja": "一語一語そのまま、逐語的に"}, {"en": "Give someone a piece of your mind", "ja": "誰かに文句を言う、遠慮なく意見を伝える"}, {"en": "Against the clock", "ja": "時間との闘い、時間に追われている状態"}, {"en": "Make up for lost time", "ja": "失った時間を取り戻す"}, {"en": "Strike while the iron is hot", "ja": "鉄は熱いうちに打て、好機を逃さない"}, {"en": "That ship has sailed", "ja": "もうその機会は過ぎてしまった"}, {"en": "All bark and no bite", "ja": "口だけで行動が伴わない"}, {"en": "Good Samaritan", "ja": "見返りを求めず困っている人を助ける親切な人"}, {"en": "Know-it-all", "ja": "何でも知っているふりをする人"}, {"en": "Rock the boat", "ja": "現状を乱す、波風を立てる"}, {"en": "Lose your marbles", "ja": "正気を失う、頭がおかしくなる"}, {"en": "Jump the gun", "ja": "時期尚早に行動する"}, {"en": "Hit the books", "ja": "勉強する"}, {"en": "A blessing in disguise", "ja": "一見悪いことに見えたが、実は良かったこと"}, {"en": "A penny saved is a penny earned", "ja": "節約したお金は稼いだお金と同じ価値がある"}, {"en": "A picture is worth a thousand words", "ja": "百聞は一見にしかず"}, {"en": "A snowball's chance in hell", "ja": "ほとんど不可能、全く見込みがない"}, {"en": "A taste of your own medicine", "ja": "自分が他人にしたことを自分も受ける、自業自得"}, {"en": "A watched pot never boils", "ja": "待つ時間は長く感じられるものだ"}, {"en": "Add insult to injury", "ja": "悪い状況にさらに悪いことが重なる"}, {"en": "After your own heart", "ja": "自分の好みにぴったりの"}, {"en": "All that glitters is not gold", "ja": "見かけによらぬもの、外見は当てにならない"}, {"en": "At the drop of a hat", "ja": "すぐに、即座に、ためらわずに"}, {"en": "Back to square one", "ja": "振り出しに戻る、最初からやり直す"}, {"en": "Basket case", "ja": "精神的に極度に不安定な状態、機能不全に陥った人や組織"}, {"en": "Bite the dust", "ja": "敗北する、失敗する、壊れる、死ぬ"}, {"en": "Straight arrow", "ja": "正直で誠実な人、道徳的に正しい人"}];
+const KEY='idiom-garden-progress-v1';
+let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+let filter='all',query='',pool=DATA.map((_,i)=>i),pos=0,revealed=false;
+const $=id=>document.getElementById(id);
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(saved))}catch(e){}}
+function filtered(){return DATA.map((x,i)=>i).filter(i=>(filter==='all'||(filter==='known'?saved[i]==='known':saved[i]!=='known'))&&(`${DATA[i].en} ${DATA[i].ja}`).toLowerCase().includes(query.toLowerCase()))}
+function updateStats(){let k=Object.values(saved).filter(x=>x==='known').length;$('known').textContent=k;$('remaining').textContent=DATA.length-k;$('bar').style.width=(k/DATA.length*100)+'%'}
+function renderList(){let ids=filtered();$('listCount').textContent=ids.length+'件';$('list').innerHTML=ids.map(i=>`<div class="item"><div><div class="en">${esc(DATA[i].en)}</div><div class="ja">${esc(DATA[i].ja)}</div></div><button data-go="${i}">${saved[i]==='known'?'✓ 習得済み':'カードへ'}</button></div>`).join('')||'<div class="item">該当するフレーズがありません。</div>';document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{pool=filtered();pos=Math.max(0,pool.indexOf(Number(b.dataset.go)));revealed=false;renderCard();window.scrollTo({top:0,behavior:'smooth'})})}
+function esc(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function renderCard(){pool=filtered();if(!pool.length){$('english').textContent='見つかりません';$('japanese').textContent='検索条件を変えてください';$('answer').hidden=false;$('cardNo').textContent='NO RESULTS';$('position').textContent='0 / 0';return}pos=(pos+pool.length)%pool.length;let i=pool[pos],c=DATA[i];$('english').textContent=c.en;$('japanese').textContent=c.ja;$('answer').hidden=!revealed;$('card').classList.toggle('revealed',revealed);$('hint').textContent=revealed?'意味を確認できたら、覚えたかどうかを記録しよう':'カードをタップして意味を確認';$('flip').textContent=revealed?'英語だけを見る':'意味を見る';$('cardNo').textContent=`CARD ${String(i+1).padStart(2,'0')} / ${DATA.length}`;$('position').textContent=`${pos+1} / ${pool.length}`;updateStats();renderList()}
+function flip(){revealed=!revealed;renderCard()}
+function mark(v){if(!pool.length)return;let i=pool[pos];if(v)saved[i]='known';else delete saved[i];persist();revealed=false;renderCard();if(pool.length>1){pos=(pos+1)%pool.length;renderCard()}}
+$('card').onclick=flip;$('card').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();flip()}};
+$('flip').onclick=flip;$('markKnown').onclick=()=>mark(true);$('markNew').onclick=()=>mark(false);
+$('prev').onclick=()=>{pos--;revealed=false;renderCard()};$('next').onclick=()=>{pos++;revealed=false;renderCard()};
+$('shuffle').onclick=()=>{pool=filtered().sort(()=>Math.random()-.5);pos=0;revealed=false;renderCard()};
+$('search').oninput=e=>{query=e.target.value;pos=0;revealed=false;renderCard()};
+document.querySelectorAll('[data-filter]').forEach(b=>b.onclick=()=>{filter=b.dataset.filter;document.querySelectorAll('[data-filter]').forEach(x=>x.classList.toggle('active',x===b));pos=0;revealed=false;renderCard()});
+renderCard();
+</script>
+</body></html>
